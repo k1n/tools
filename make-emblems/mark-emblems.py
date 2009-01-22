@@ -5,16 +5,24 @@ logging.basicConfig(level = logging.DEBUG,
                     filename='/tmp/markeblems.log',
                     filemode='w')
 
+class InfoProvider(nautilus.InfoProvider):
+    def __init__(self):
+        pass
+
+    def update_file_info(self, file, emblem):
+        file.add_emblem(emblem)
+        logging.debug("Added %s to %s success" % (emblem, file.get_name()))
+
+provider = InfoProvider()
+
 class MarkEmblemsProvider(nautilus.MenuProvider):
     def __init__(self):
         pass
 
     def on_favourite_activate(self, widget, files):
         for file in files:
-            logging.debug(file)
-            logging.debug(dir(file))
-            logging.debug(file.get_string_attribute ('emblem'))
-            file.add_emblem('favourite')
+            logging.debug(file.get_string_attribute('emblems'))
+            provider.update_file_info(file, 'favorite')
 
     def get_file_items(self, window, files):
         submenu = nautilus.Menu()
