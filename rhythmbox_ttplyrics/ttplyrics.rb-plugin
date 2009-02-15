@@ -1,0 +1,11 @@
+[RB Plugin]
+Loader=python
+Module=ttplyrics
+IAge=1
+Name=ttplyrics
+Name[zh_CN]=千千静听歌词
+Description=View lyrics from ttplayer <http://www.ttplayer.com>
+Description[zh_CN]=利用千千静听的服务器查看歌词
+Authors=Sevenever <sevenever@gmail.com>
+Copyright=Copyright © 2007 Sevenever
+Website=http://www.sevenever.com
