@@ -1,10 +1,10 @@
 [Desktop Entry]
 Version=1.0
 Encoding=UTF-8
-Name=Translator
+Name=Google Translator
 Type=Application
 Terminal=false
-Icon[zh_CN]=/home/tualatrix/Sources/tools/translator/translator.png
-Exec=/home/tualatrix/.local/bin/translator
+Icon[zh_CN]=/home/ted/Sources/tools/translator/translator.png
+Exec=/home/ted/.local/bin/translator
 Name[zh_CN]=Google Translator
-Icon=/home/tualatrix/Sources/tools/translator/translator.png
+Icon=/home/ted/Sources/tools/translator/translator.png
