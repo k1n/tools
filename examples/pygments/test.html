@@ -1,0 +1,60 @@
+
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <title>O_O</title>
+        <link rel="stylesheet" type="text/css" href="a.css" />
+    </head>
+    <body>
+    
+<div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">pygments</span> <span class="kn">import</span> <span class="n">highlight</span>
+<span class="kn">from</span> <span class="nn">pygments.lexers</span> <span class="kn">import</span> <span class="n">get_lexer_by_name</span>
+<span class="kn">from</span> <span class="nn">pygments.formatters</span> <span class="kn">import</span> <span class="n">HtmlFormatter</span>
+
+<span class="k">def</span> <span class="nf">code2html</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">lang</span><span class="p">):</span>
+    <span class="n">lexer</span> <span class="o">=</span> <span class="n">get_lexer_by_name</span><span class="p">(</span><span class="n">lang</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">stripall</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">formatter</span> <span class="o">=</span> <span class="n">HtmlFormatter</span><span class="p">()</span>
+<span class="c">#            full = True,</span>
+<span class="c">#            linenos=False,</span>
+<span class="c">#            encoding=&#39;utf-8&#39;,</span>
+<span class="c">#            noclasses=&quot;True&quot;)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">highlight</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">lexer</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+<span class="k">def</span> <span class="nf">output_head</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">&lt;!DOCTYPE html</span>
+<span class="s">PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;</span>
+<span class="s">&quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;</span>
+
+<span class="s">&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;</span>
+<span class="s">    &lt;head&gt;</span>
+<span class="s">        &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;</span>
+<span class="s">        &lt;title&gt;O_O&lt;/title&gt;</span>
+<span class="s">        &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://www.peerat.com/code/style.css&quot; /&gt;</span>
+<span class="s">    &lt;/head&gt;</span>
+<span class="s">    &lt;body&gt;</span>
+<span class="s">    &quot;&quot;&quot;</span>
+
+<span class="k">def</span> <span class="nf">output_end</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s">&quot;&lt;/body&gt;&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;&lt;/html&gt;&quot;</span>
+
+
+<span class="n">output_head</span><span class="p">()</span>
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+<span class="n">code</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">code2html</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="s">&#39;python&#39;</span><span class="p">)</span>
+<span class="n">output_end</span><span class="p">()</span>
+</pre></div>
+
+</body>
+</html>
