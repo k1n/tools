@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Mar  2 16:14:45 2009 -->
+<!--Generated with glade3 3.4.5 on Mon Mar  2 17:12:10 2009 -->
 <glade-interface>
-  <widget class="GtkWindow" id="window1">
+  <widget class="GtkWindow" id="main_window">
     <property name="border_width">6</property>
+    <property name="title" translatable="yes">Application releaser</property>
+    <property name="window_position">GTK_WIN_POS_CENTER_ALWAYS</property>
+    <signal name="delete_event" handler="gtk_main_quit"/>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
@@ -118,9 +121,9 @@
         </child>
         <child>
           <widget class="GtkTextView" id="changelog_view">
+            <property name="height_request">120</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="text" translatable="yes"> 	</property>
           </widget>
           <packing>
             <property name="position">1</property>
