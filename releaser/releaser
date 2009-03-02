@@ -1,0 +1,15 @@
+#!/bin/sh
+
+SOURCS=$HOME/Sources/ubuntu-tweak
+WORKDIR=/tmp
+WORKROOT=/tmp/ubuntu-tweak
+
+cd $SOURCS
+git pull
+
+rm -rf $WORKROOT
+cp -r $SOURCS $WORKDIR
+cd $WORKROOT
+
+./configure
+make distcheck

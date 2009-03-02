@@ -29,7 +29,8 @@ def screenshotthumb(filename='', width=200, height=200):
     h = gtk.gdk.screen_height()
     screenshot = gtk.gdk.Pixbuf.get_from_drawable(
             gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, True, 8, w, h),
-            gtk.gdk.get_default_root_window(),
+#            gtk.gdk.get_default_root_window(),
+            gtk.gdk.window_get_toplevels()[1],
             gtk.gdk.colormap_get_system(),
             0, 0, 0, 0, w, h)
     width, height = _size(screenshot.get_width(), screenshot.get_height(), width, height)
