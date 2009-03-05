@@ -95,6 +95,7 @@ class PangoOsd(object):
 #            self.ctx.clip()
 
         self.window.window.move_resize(700, 750, self.width, 130)
+        self.window.window.stick()
         ctx = self.window.window.cairo_create()
         ptx = self.window.get_pango_context()
 
