@@ -12,7 +12,11 @@ import gobject
 exposed = False
 index = 0
 
-songs = ['Hello', 'World', 'Ubuntu', 'Tweak']
+songs = [
+    'Hello World!', 
+    'I\'m TualatriX!',
+    'How are you?',
+]
 
 class PangoOsd(object):
         def __init__(self):
@@ -46,9 +50,9 @@ class PangoOsd(object):
 
 #                self.vbox = gtk.VBox()
 #                self.vbox.set_app_paintable(True)
-                self.object = gtk.Label()
-                self.window.add(self.object)
-                self.object.input_shape_combine_mask(pixmap, 0, 0)
+#                self.object = gtk.Label()
+#                self.window.add(self.object)
+#                self.object.input_shape_combine_mask(pixmap, 0, 0)
                
                 self.window.connect("expose_event", self.expose)
                 self.window.connect("destroy", gtk.main_quit)
@@ -109,15 +113,17 @@ class PangoOsd(object):
 #                layout = pango.Layout(ptx)
 #                layout = ctx.create_layout()
 #                layout = self.object.get_layout()
-                layout = self.object.create_pango_layout(text)
+                layout = self.window.create_pango_layout(text)
                 layout.set_font_description(font) 
                 layout.set_text(text)
-                attrs = pango.AttrList()
-                attr = pango.AttrForeground(65535, 0, 0, 0, -1)
-                attrs.insert(attr)
-                layout.set_attributes(attrs)
+#                attrs = pango.AttrList()
+#                attr = pango.AttrForeground(65535, 0, 0, 0, -1)
+#                attrs.insert(attr)
+#                layout.set_attributes(attrs)
                 self.layout = layout
 
+                ctx.set_source_rgba(1, 0, 0, 0.5)
+                ctx.set_operator (cairo.OPERATOR_SOURCE)
                 ctx.show_layout(layout)
             else:
                 layout = self.layout
@@ -127,8 +133,9 @@ class PangoOsd(object):
 
                 layout.set_text(text)
 
+                ctx.set_source_rgba(1, 0, 0, 0.5)
+                ctx.set_operator (cairo.OPERATOR_SOURCE)
                 ctx.show_layout(layout)
-
 
         def hide(self):
             self.window.hide()
