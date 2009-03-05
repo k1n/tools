@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# coding: utf-8
 import sys
 import gobject
 import pango
@@ -15,7 +16,7 @@ songs = [
     'Hello World!', 
     'I\'m TualatriX!',
     'How are you?',
-    'I love Gentoo very much! But I also like Ubuntu!',
+    '我也會顯示中文喔！',
     'GNU/Linux is my favourite!',
 ]
 
@@ -93,7 +94,7 @@ class PangoOsd(object):
 #                            event.area.width, event.area.height)
 #            self.ctx.clip()
 
-        self.window.window.move_resize(700, 750, self.width, 80)
+        self.window.window.move_resize(700, 750, self.width, 130)
         ctx = self.window.window.cairo_create()
         ptx = self.window.get_pango_context()
 
@@ -109,7 +110,7 @@ class PangoOsd(object):
 #                    exposed = True
 
     def draw_text(self, text = 'Hello'):
-        self.window.window.move_resize(700, 750, 1280, 80)
+        self.window.window.move_resize(700, 720, 1280, 112)
         ctx = self.window.window.cairo_create()
         ptx = self.window.get_pango_context()
 
@@ -122,7 +123,7 @@ class PangoOsd(object):
         font = pango.FontDescription()
 
         font.set_family("sans")
-        font.set_size(32 * pango.SCALE)
+        font.set_size(64 * pango.SCALE)
 
         if not self.layout:
 #                layout = pango.Layout(ptx)
@@ -147,7 +148,7 @@ class PangoOsd(object):
 
         ctx.move_to(*self.center_word(*self.layout.get_pixel_size()))
 
-        ctx.set_source_rgba(1, 1, 0, 0.6)
+        ctx.set_source_rgba(0.8, 1, 0, 0.8)
         ctx.set_operator (cairo.OPERATOR_SOURCE)
         ctx.show_layout(self.layout)
 
