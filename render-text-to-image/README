@@ -1,0 +1,76 @@
+Render-Text-to-Image
+====================
+
+A simple text rendering utility
+
+This program renders a string of text into a PNG image using the specified
+font, size, and colors. It can be used to render headings for web pages
+semi-automatically, or otherwise build images from text strings.
+
+The font rendering is handled by Pango and Cairo, so the system-installed fonts
+you use on your desktop can be used. If you want to preview the fonts you have
+installed on your system, I recommend using the ever-fabulous Gnome Specimen
+program, which has also been written by yours truly.
+
+Copyright  2007  Wouter Bolsterlee <uws@xs4all.nl>
+
+This program is distributed under the GPL v2 (or later) license. See the
+COPYING file for more licensing information.
+
+
+Basic Usage
+===========
+
+To render the string "Hello, world!" in grey on black Georgia Bold 48px to the
+file hello.png, use something like:
+
+  $ render-text-to-image \
+    --font='Georgia' --size=48 \
+	--text-color='#eee' --background-color='#000' \
+    --text='Hello, world!' \
+	--output=hello.png
+
+
+Specifying Colors and Margins
+=============================
+
+You can use both 3 or 6 hex digits to encode color values, just like HTML/CSS.
+For example, both #900 and #900 encode the same shade of red. Additionally, you
+can specify color transparency by supplying an alpha component, e.g. #c900 (or
+#cc9900). In all color specification formats the leading # character is
+optional.
+
+To specify the margin around the text in the rendered image, you can use the
+--margin parameter. The syntax closely resembles the CSS syntax for margins.
+The numbers supplied correspond to the number of pixels used for padding. For
+example, '--margin '1 2 3 4' results in 1 pixel at the top, 2 pixels at the
+right side, 3 pixels at the bottom and 4 pixels at the left side. You can
+specify one, two, three or 4 values to the --margin parameter. If you specify
+only one value, that value is used for all sides. If you specify two values,
+those are used for top/bottom and left/right respectively. Three values are
+interpreted as top, left/right, and bottom.
+
+
+Using Simple Markup
+===================
+
+If you specify the --pango-markup flag, you can use simple Pango markup tags
+(these resemble HTML formatting tags), e.g. '<b>Bold</b> or <i>italic</i>'.
+Read the Pango documentation for more information.
+
+
+Requirements
+============
+
+The conversion program is written in Python (tested with 2.4 and 2.5) and
+requires Cairo and Pango libraries and the Python bindings for it (provided by
+PyGtk). More specifically, it uses the PangoCairo module, so you need a Pango
+library with Cairo support.
+
+
+Issues, problems, and feedback
+==============================
+
+This program is a relatively quick hack, so don't expect too much of it. If you
+feel like contacting me with problems or suggestions, please mail me. Thanks.
+

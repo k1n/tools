@@ -1,18 +1,22 @@
 #!/usr/bin/python
+# coding: utf-8
+
 import sys
-import gobject
-import pango
-import pygtk
 import gtk
-from gtk import gdk
 import cairo
-# import Images
+import pango
 import gobject
+from gtk import gdk
 
 exposed = False
 index = 0
 
-songs = ['Hello', 'World', 'Ubuntu', 'Tweak']
+songs = [
+    'Hello World!',
+    'This is TualatriX\'s posd',
+    'It is amazing!',
+    'Ubuntu: Linux操作系统',
+]
 
 class PangoOsd(object):
         def __init__(self):
@@ -55,34 +59,35 @@ class PangoOsd(object):
 
                 self.layout = None
 #                self.window.show_all()
-                gobject.timeout_add(1000, self.on_timeout)
+                gobject.timeout_add(2000, self.on_timeout)
 
         def on_timeout(self):
             global index, songs
             print 'time out'
             self.draw_text(songs[index])
             index += 1
+
 #            self.ctx.update_layout(self.layout)
 #            self.ctx.show_layout(self.layout)
             return True
 
         def expose (self, widget, event):
-                global exposed
-                self.ctx = self.window.window.cairo_create()
-                self.ptx = self.window.get_pango_context()
-                # set a clip region for the expose event, XShape stuff
-                self.ctx.save()
-                if self.supports_alpha == False:
-                        self.ctx.set_source_rgb(1, 1, 1)
-                else:
-                        self.ctx.set_source_rgba(0.3, 0.5, 0.4,0)
-                self.ctx.set_operator (cairo.OPERATOR_SOURCE)
-                self.ctx.paint()
-                self.ctx.restore()
-                self.ctx.rectangle(event.area.x, event.area.y,
-                                event.area.width, event.area.height)
-                self.ctx.clip()
-                #self.draw_image(self.ctx,0,0,'base.png')
+            global exposed
+            self.ctx = self.window.window.cairo_create()
+            self.ptx = self.window.get_pango_context()
+            # set a clip region for the expose event, XShape stuff
+            self.ctx.save()
+            if self.supports_alpha == False:
+                    self.ctx.set_source_rgb(1, 1, 1)
+            else:
+                    self.ctx.set_source_rgba(0.3, 0.5, 0.4,0)
+            self.ctx.set_operator (cairo.OPERATOR_SOURCE)
+            self.ctx.paint()
+            self.ctx.restore()
+            self.ctx.rectangle(event.area.x, event.area.y,
+                            event.area.width, event.area.height)
+            self.ctx.clip()
+            #self.draw_image(self.ctx,0,0,'base.png')
 #                if not exposed:
 #                    self.draw_text(self.ctx, self.ptx)
 #                    print self.ctx, self.ptx
@@ -94,8 +99,8 @@ class PangoOsd(object):
             ptx = self.window.get_pango_context()
 
             ctx.save()
-            ctx.set_source_rgba(0.3, 0.0, 0.0, 0)
-            ctx.set_operator (cairo.OPERATOR_SOURCE)
+            ctx.set_source_rgba(0.3, 0.0, 0.0, 0.3)
+            ctx.set_operator(cairo.OPERATOR_SOURCE)
             ctx.paint()
             ctx.restore()
 
@@ -119,16 +124,17 @@ class PangoOsd(object):
                 self.layout = layout
 
                 ctx.show_layout(layout)
-            else:
-                layout = self.layout
-                layout.set_alignment(pango.ALIGN_RIGHT)
-                print layout.get_alignment()
-                print layout.get_pixel_size()
 
-                layout.set_text(text)
+            layout = self.layout
+            layout.set_alignment(pango.ALIGN_RIGHT)
+            print layout.get_alignment()
+            print layout.get_pixel_size()
 
-                ctx.show_layout(layout)
+            layout.set_text(text)
 
+            ctx.set_source_rgba(1, 0, 0, 0.5)
+            ctx.fill()
+            ctx.show_layout(layout)
 
         def hide(self):
             self.window.hide()
