@@ -1,13 +1,10 @@
 #!/usr/bin/python
 # coding: utf-8
+
 import sys
-import gobject
-import pango
-import pygtk
 import gtk
-from gtk import gdk
 import cairo
-# import Images
+import pango
 import gobject
 
 index = 0
@@ -23,7 +20,8 @@ songs = [
 class PangoOsd(object):
     def __init__(self):
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-       
+
+        # Initialize window
         self.window.set_decorated(False)
         self.window.set_keep_above(True)
         self.window.set_app_paintable(True)
@@ -45,21 +43,14 @@ class PangoOsd(object):
         else:
                 self.supports_alpha = True
 
-        self.w,self.h = self.window.get_size()
+        self.w, self.h = self.window.get_size()
         pixmap = gtk.gdk.Pixmap(None, self.w, self.h, 1)
         self.window.input_shape_combine_mask(pixmap, 0, 0)
 
-#                self.vbox = gtk.VBox()
-#                self.vbox.set_app_paintable(True)
-#                self.object = gtk.Label()
-#                self.window.add(self.object)
-#                self.object.input_shape_combine_mask(pixmap, 0, 0)
-       
-        self.window.connect("expose_event", self.expose)
-        self.window.connect("destroy", gtk.main_quit)
+        self.window.connect('expose_event', self.on_expose_event)
+        self.window.connect('destroy', gtk.main_quit)
 
         self.layout = None
-#                self.window.show_all()
         gobject.timeout_add(2000, self.on_timeout)
 
     def on_timeout(self):
@@ -71,29 +62,14 @@ class PangoOsd(object):
         else:
             gtk.main_quit()
 
-    def expose (self, widget, event):
+    def on_expose_event(self, widget, event):
         screen = self.window.get_screen()
         self.width, self.height = screen.get_width(), screen.get_height()
-#                self.window.set_default_size(w, 100)
-#                self.window.move(800, 600)
-        colormap = screen.get_rgba_colormap()
-        gtk.widget_set_default_colormap(colormap)
 
         self.ctx = self.window.window.cairo_create()
         self.ptx = self.window.get_pango_context()
-        # set a clip region for the expose event, XShape stuff
-        self.ctx.save()
-#        if self.supports_alpha == False:
-#                self.ctx.set_source_rgb(1, 1, 1)
-#        else:
-#                self.ctx.set_source_rgba(0.3, 0.5, 0.4,0)
-#            self.ctx.set_operator (cairo.OPERATOR_SOURCE)
-#            self.ctx.paint()
-#            self.ctx.restore()
-#            self.ctx.rectangle(event.area.x, event.area.y,
-#                            event.area.width, event.area.height)
-#            self.ctx.clip()
 
+        # set a clip region for the expose event, XShape stuff
         self.window.window.move_resize(700, 750, self.width, 130)
         self.window.window.stick()
         ctx = self.window.window.cairo_create()
@@ -104,11 +80,6 @@ class PangoOsd(object):
         ctx.set_operator (cairo.OPERATOR_SOURCE)
         ctx.paint()
         ctx.restore()
-        #self.draw_image(self.ctx,0,0,'base.png')
-#                if not exposed:
-#                    self.draw_text(self.ctx, self.ptx)
-#                    print self.ctx, self.ptx
-#                    exposed = True
 
     def draw_text(self, text = 'Hello'):
         self.window.window.move_resize(700, 720, 1280, 112)
@@ -127,24 +98,11 @@ class PangoOsd(object):
         font.set_size(64 * pango.SCALE)
 
         if not self.layout:
-#                layout = pango.Layout(ptx)
-#                layout = ctx.create_layout()
-#                layout = self.object.get_layout()
             layout = self.window.create_pango_layout(text)
             layout.set_font_description(font) 
             layout.set_text(text)
-#                attrs = pango.AttrList()
-#                attr = pango.AttrForeground(65535, 0, 0, 0, -1)
-#                attrs.insert(attr)
-#                layout.set_attributes(attrs)
             self.layout = layout
-#            ctx.move_to(*self.center_word(*layout.get_pixel_size()))
 
-#            ctx.set_source_rgba(0.2, 0.2, 0.2, 0.7)
-#            ctx.set_operator (cairo.OPERATOR_SOURCE)
-#            ctx.show_layout(layout)
-#                layout.set_alignment(pango.ALIGN_RIGHT)
-#                print layout.get_alignment()
         self.layout.set_text(text)
 
         ctx.move_to(*self.center_word(*self.layout.get_pixel_size()))
@@ -154,7 +112,6 @@ class PangoOsd(object):
         ctx.show_layout(self.layout)
 
     def center_word(self, width, height):
-        print width
         return ((self.width - width)/2, 0)
 
     def hide(self):
