@@ -19,7 +19,7 @@ songs = [
 
 class PangoOsd(object):
     def __init__(self):
-        self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        self.window = gtk.Window(gtk.WINDOW_POPUP)
 
         # Initialize window
         self.window.set_decorated(False)
