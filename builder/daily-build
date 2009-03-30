@@ -1,0 +1,37 @@
+#!/bin/sh
+
+
+APPLICATION=$1
+VERSION=$2
+DISTRO=$3
+MKLOG=$PWD/mkchangelog
+
+SRC_ROOT=$HOME/Sources/$APPLICATION
+BUILD_DIR=$HOME/build
+BUILD_ROOT=$BUILD_DIR/$APPLICATION
+
+CLEAN() {
+	rm -rf $BUILD_ROOT
+}
+CLEAN
+
+INFO() {
+	echo $APPLICATION
+	echo $SRC_ROOT
+	echo $BUILD_ROOT
+}
+INFO
+
+mkdir $BUILD_DIR
+
+cd $SRC_ROOT
+git pull
+
+cp -r $SRC_ROOT $BUILD_ROOT/
+cp -r $BUILD_ROOT/deb/$DISTRO $BUILD_ROOT/debian
+rm -r $BUILD_ROOT/deb
+rm -r $BUILD_ROOT/rpmspec
+$MKLOG $APPLICATION $VERSION $DISTRO $BUILD_ROOT/debian/changelog
+
+cd $BUILD_ROOT
+debuild -S -sa
