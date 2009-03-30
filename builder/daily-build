@@ -1,7 +1,24 @@
 #!/bin/sh
 
 
-APPLICATION=$1
+if [ -n "$1" ];then
+	APPLICATION=$1
+else
+	APPLICATION=ubuntu-tweak
+fi
+
+if [ -n "$2" ];then
+	VERSION=$2
+else
+	VERSION=0.4.7
+fi
+
+if [ -n "$3" ];then
+	DISTRO=$3
+else
+	DISTRO=hardy
+fi
+
 VERSION=$2
 DISTRO=$3
 MKLOG=$PWD/mkchangelog
@@ -17,12 +34,16 @@ CLEAN
 
 INFO() {
 	echo $APPLICATION
+	echo $VERSION
+	echo $DISTRO
 	echo $SRC_ROOT
 	echo $BUILD_ROOT
 }
 INFO
 
-mkdir $BUILD_DIR
+if [ ! -d $BUILD_DIR ];then
+	mkdir $BUILD_DIR
+fi
 
 cd $SRC_ROOT
 git pull
