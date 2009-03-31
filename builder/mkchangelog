@@ -23,7 +23,7 @@ def make_timestamp():
     return time.strftime('%a, %d %b %Y %X +0800', time.localtime())
 
 def make_daily_timestamp(distro):
-    return '%s~%s2' % (time.strftime('%Y%m%d', time.localtime()), distro)
+    return '%s~%s1' % (time.strftime('%Y%m%d', time.localtime()), distro)
 
 def make_changelog_section(app, major, minor, distro, changelog):
     global TEMPLATE

@@ -27,10 +27,19 @@ SRC_ROOT=$HOME/Sources/$APPLICATION
 BUILD_DIR=$HOME/build
 BUILD_ROOT=$BUILD_DIR/$APPLICATION
 
-CLEAN() {
+CLEAN_OLD() {
 	rm -rf $BUILD_ROOT
 }
-CLEAN
+
+CLEAN_OLD
+
+CLEAN_SRC() {
+	rm -rf $BUILD_ROOT/.git
+	rm -rf $BUILD_ROOT/.gitignore
+	cd $BUILD_ROOT
+	find -name '*.pyc' | xargs rm 
+	find -name '*.po' | xargs rm 
+}
 
 INFO() {
 	echo $APPLICATION
@@ -46,13 +55,14 @@ if [ ! -d $BUILD_DIR ];then
 fi
 
 cd $SRC_ROOT
-git pull
+#git pull
 
 cp -r $SRC_ROOT $BUILD_ROOT/
 cp -r $BUILD_ROOT/deb/$DISTRO $BUILD_ROOT/debian
 rm -r $BUILD_ROOT/deb
 rm -r $BUILD_ROOT/rpmspec
 $MKLOG $APPLICATION $VERSION $DISTRO $BUILD_ROOT/debian/changelog
+CLEAN_SRC
 
 cd $BUILD_ROOT
 debuild -S -sa
