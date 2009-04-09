@@ -35,6 +35,7 @@ class AnimatedLabel (gtk.Layout):
 
     items   = None # items must either be a GettableList object
                    # or expose a get () method'''
+    pause = 0
     timeout = 0
     format  = ""   # format must be a valid formatting string for a single %s
 
@@ -50,15 +51,16 @@ class AnimatedLabel (gtk.Layout):
     width   = 0
     height  = 0
 
-    def __init__ (self, items, width, height, timeout, format = "%s"):
+    def __init__ (self, items, width, height, pause, timeout, format = "%s"):
         '''Initiate object'''
         super (AnimatedLabel, self).__init__ ()
         self.items = items
         self.next = self.items.get () # Pop the first item
         self.width = width
         self.height = height
-        self.timeout = timeout
+        self.pause = pause
         self.format = format
+        self.timeout = timeout
         self.set_size_request (width, height)
         self.connect ("button-press-event", self.on_button_press)
         self.connect ("map", self.reset_animation)
@@ -68,7 +70,7 @@ class AnimatedLabel (gtk.Layout):
         self.reset_label ()
         if not self.label:
             return
-        self.source = gobject.timeout_add (5, self.animate)
+        self.source = gobject.timeout_add (self.timeout, self.animate)
 
     def make_label (self):
         '''Build the label widgets'''
@@ -102,100 +104,6 @@ class AnimatedLabel (gtk.Layout):
         self.animate ()
         return True
 
-class VertAnimatedLabel (AnimatedLabel):
-    '''Vertically animated label'''
-
-    rewind_text       = ""
-    last_label_height = 0
-
-    def rewind_animate (self):
-        '''Animation function for the rewind step'''
-        self.source = None
-        if self.state == -2:
-            self.item = self.rewind_text
-            self.make_label ()
-            label_height = self.label.size_request ()[1]
-            total_height = self.height + label_height
-            self.pos = float (self.last_label_height) / total_height
-            self.current.set (0.5, self.pos, 0, 0)
-            self.state = 0
-            self.source = gobject.timeout_add (10, self.rewind_animate)
-        elif self.state == 0:
-            if self.pos < 1.0:
-                '''Move towards the bottom position'''
-                self.pos = min (1.0, self.pos + 0.01)
-                self.current.set (0.5, self.pos, 0, 0)
-                self.source = gobject.timeout_add (10, self.rewind_animate)
-            else:
-                '''Bottommost position reached'''
-                self.rewind_text = ""
-                self.reset_animation ()
-        return False
-
-    def animate (self):
-        '''The actual animation function'''
-        self.source = None
-        if self.state == -2:
-            self.rewind_animate ()
-        elif self.state == -1:
-            self.rewind_text += "\n\n%s" % self.item
-            self.state = 0
-            self.animate ()
-        elif self.state == 0:
-            if self.pos:
-                '''Move towards the top position'''
-                self.pos = max (0, self.pos - 0.02)
-                label_height = self.label.size_request ()[1]
-                total_height = self.height + label_height
-                real_pos = float (self.pos * self.height + label_height) \
-                            / total_height
-                self.current.set (0.5, real_pos, 0, 0)
-                self.source = gobject.timeout_add (5, self.animate)
-            else:
-                '''Topmost position reached'''
-                self.state = 1
-                self.pos = 1.0
-                self.source = gobject.timeout_add (self.timeout, self.animate)
-        elif self.state == 1:
-            '''Dont let selected labels vanish until they are unselected'''
-            if self.label.get_selection_bounds () == ():
-                self.state = 2
-            self.source = gobject.timeout_add (5, self.animate)
-        elif self.state == 2:
-            if not self.next:
-                self.state = -2
-                self.last_label_height = self.label.size_request ()[1]
-                self.reset_animation ()
-                self.source = gobject.timeout_add (1, self.animate)
-            elif self.pos:
-                '''Move out of the visible region of the Layout'''
-                self.pos = max (0, self.pos - 0.02)
-                label_height = self.label.size_request ()[1]
-                total_height = self.height + label_height
-                real_pos = float (self.pos * label_height) \
-                            / total_height
-                self.current.set (0.5, real_pos, 0, 0)
-                self.source = gobject.timeout_add (5, self.animate)
-            else:
-                '''Label has disappeared, bye bye'''
-                self.reset_animation ()
-        return False
-
-    def make_label (self):
-        '''Build a new label widget'''
-        super (VertAnimatedLabel, self).make_label ()
-        if not self.label:
-            return
-        self.label.set_size_request (self.width, -1)
-        self.current = gtk.Alignment (0.0, 1.0)
-        label_height = self.label.size_request ()[1]
-        height = self.size_request ()[1]
-        self.current.set_size_request (-1, 2 * label_height + height)
-        self.current.add (self.label)
-        self.put (self.current, 0, - label_height)
-        self.pos = 1.0
-        self.show_all ()
-
 class HorzAnimatedLabel (AnimatedLabel):
     '''Horizontally animated label'''
 
@@ -213,7 +121,7 @@ class HorzAnimatedLabel (AnimatedLabel):
             else:
                 '''Center position reached, switch to return mode'''
                 self.state = 1
-                self.source = gobject.timeout_add (self.timeout, self.animate)
+                self.source = gobject.timeout_add (self.pause, self.animate)
         elif self.state == 1:
             '''Dont let selected labels vanish until they are unselected'''
             if self.label.get_selection_bounds () == ():
@@ -300,14 +208,38 @@ gobject.type_register (WindowedLabel)
 
 class GnomeAbout (gtk.Dialog):
     def __init__ (self):
-        super (GnomeAbout, self).__init__ ("About the GNOME Desktop",
+        super (GnomeAbout, self).__init__ ("About Ubuntu Tweak",
                                            buttons = (gtk.STOCK_CLOSE,
                                                       gtk.RESPONSE_CLOSE))
 
         self.set_default_size(400, 300)                                            
         alignment = gtk.Alignment (0.5, 0.5)
-        label = HorzAnimatedLabel (GettableList(['hello', 'world', 'haha']), 400,
-                                   30, 3000, "<b>%s</b>")
+        label = HorzAnimatedLabel (GettableList(['Hello World!']), 400,
+                                   30, 3000, 100, "<b>%s</b>")
+        alignment.add (label)
+        self.vbox.pack_start (alignment)
+
+        alignment = gtk.Alignment (0.5, 0.5)
+        label = HorzAnimatedLabel (GettableList(['I\'m TualatriX!']), 400,
+                                   30, 3000, 500, "<b>%s</b>")
+        alignment.add (label)
+        self.vbox.pack_start (alignment)
+
+        alignment = gtk.Alignment (0.5, 0.5)
+        label = HorzAnimatedLabel (GettableList(['I Love GTK+']), 400,
+                                   30, 3000, 900, "<b>%s</b>")
+        alignment.add (label)
+        self.vbox.pack_start (alignment)
+
+        alignment = gtk.Alignment (0.5, 0.5)
+        label = HorzAnimatedLabel (GettableList(['Ubuntu is powerful!']), 400,
+                                   30, 3000, 1300, "<b>%s</b>")
+        alignment.add (label)
+        self.vbox.pack_start (alignment)
+
+        alignment = gtk.Alignment (0.5, 0.5)
+        label = HorzAnimatedLabel (GettableList(['So is Gentoo!']), 400,
+                                   30, 3000, 1700, "<b>%s</b>")
         alignment.add (label)
         self.vbox.pack_start (alignment)
 
