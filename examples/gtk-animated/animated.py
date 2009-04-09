@@ -43,6 +43,7 @@ class AnimatedLabel (gtk.Layout):
     next    = None
 
     current = None
+    direction = 0 # 0 mean from right to left, 1 mean from left to right
     label   = None
     source  = None
     state   = 0    # 0 = appearing ; 1 = landed ; 2 = vanishing
@@ -51,7 +52,7 @@ class AnimatedLabel (gtk.Layout):
     width   = 0
     height  = 0
 
-    def __init__ (self, items, width, height, pause, timeout, format = "%s"):
+    def __init__ (self, items, width, height, pause, timeout, direction, format = "%s"):
         '''Initiate object'''
         super (AnimatedLabel, self).__init__ ()
         self.items = items
@@ -61,6 +62,7 @@ class AnimatedLabel (gtk.Layout):
         self.pause = pause
         self.format = format
         self.timeout = timeout
+        self.direction = direction
         self.set_size_request (width, height)
         self.connect ("button-press-event", self.on_button_press)
         self.connect ("map", self.reset_animation)
@@ -110,33 +112,62 @@ class HorzAnimatedLabel (AnimatedLabel):
     def animate (self):
         '''The actual animation function'''
         self.source = None
-        if self.state == -2:
-            self.reset_animation ()
-        elif self.state <= 0:
-            if self.pos != 0.5:
-                '''Move towards the center position'''
-                self.pos = max (0.5, self.pos - 0.02)
-                self.current.set (self.pos, 0.5, 0, 0)
-                self.source = gobject.timeout_add (5, self.animate)
-            else:
-                '''Center position reached, switch to return mode'''
-                self.state = 1
-                self.source = gobject.timeout_add (self.pause, self.animate)
-        elif self.state == 1:
-            '''Dont let selected labels vanish until they are unselected'''
-            if self.label.get_selection_bounds () == ():
-                self.state = 2
-            self.source = gobject.timeout_add (5, self.animate)
-        elif self.state == 2:
-            if self.pos:
-                '''Disappear by moving left'''
-                self.pos = max (0, self.pos - 0.02)
-                self.current.set (self.pos, 0.5, 0, 0)
-                self.source = gobject.timeout_add (5, self.animate)
-            else:
-                '''Left position reached, let's move on'''
+        if self.direction == 0:
+            if self.state == -2:
                 self.reset_animation ()
-        return False
+            elif self.state <= 0:
+                if self.pos != 0.5:
+                    '''Move towards the center position'''
+                    self.pos = max (0.5, self.pos - 0.02)
+                    self.current.set (self.pos, 0.5, 0, 0)
+                    self.source = gobject.timeout_add (5, self.animate)
+                else:
+                    '''Center position reached, switch to return mode'''
+                    self.state = 1
+                    self.source = gobject.timeout_add (self.pause, self.animate)
+            elif self.state == 1:
+                '''Dont let selected labels vanish until they are unselected'''
+                if self.label.get_selection_bounds () == ():
+                    self.state = 2
+                self.source = gobject.timeout_add (5, self.animate)
+            elif self.state == 2:
+                if self.pos:
+                    '''Disappear by moving left'''
+                    self.pos = max (0, self.pos - 0.02)
+                    self.current.set (self.pos, 0.5, 0, 0)
+                    self.source = gobject.timeout_add (5, self.animate)
+                else:
+                    '''Left position reached, let's move on'''
+                    self.reset_animation ()
+            return False
+        else:
+            if self.state == -2:
+                self.reset_animation ()
+            elif self.state <= 0:
+                if self.pos != 0.5:
+                    '''Move towards the center position'''
+                    self.pos = min (0.5, self.pos + 0.02)
+                    self.current.set (self.pos, 0.5, 0, 0)
+                    self.source = gobject.timeout_add (5, self.animate)
+                else:
+                    '''Center position reached, switch to return mode'''
+                    self.state = 1
+                    self.source = gobject.timeout_add (self.pause, self.animate)
+            elif self.state == 1:
+                '''Dont let selected labels vanish until they are unselected'''
+                if self.label.get_selection_bounds () == ():
+                    self.state = 2
+                self.source = gobject.timeout_add (5, self.animate)
+            elif self.state == 2:
+                if self.pos:
+                    '''Disappear by moving left'''
+                    self.pos = min (1, self.pos + 0.02)
+                    self.current.set (self.pos, 0.5, 0, 0)
+                    self.source = gobject.timeout_add (5, self.animate)
+                else:
+                    '''Left position reached, let's move on'''
+                    self.reset_animation ()
+            return False
 
     def make_label (self):
         '''Build a new label widget'''
@@ -144,13 +175,17 @@ class HorzAnimatedLabel (AnimatedLabel):
         if not self.label:
             return
         self.label.set_size_request (-1, self.height)
-        self.current = gtk.Alignment (1.0, 0.0)
+        if self.direction == 0:
+            self.current = gtk.Alignment (1.0, 0.0)
+            self.pos = 1.0
+        else:
+            self.current = gtk.Alignment (0.0, 0.0)
+            self.pos = 0.0
         label_width = self.label.size_request ()[0]
         width = self.size_request ()[0]
         self.current.set_size_request (2 * label_width + width, -1)
         self.current.add (self.label)
         self.put (self.current, - label_width, 0)
-        self.pos = 1.0
         self.show_all ()
 
 class WindowedLabel (gtk.Label):
@@ -215,31 +250,31 @@ class GnomeAbout (gtk.Dialog):
         self.set_default_size(400, 300)                                            
         alignment = gtk.Alignment (0.5, 0.5)
         label = HorzAnimatedLabel (GettableList(['Hello World!']), 400,
-                                   30, 3000, 100, "<b>%s</b>")
+                                   30, 3000, 100, 0, "<b>%s</b>")
         alignment.add (label)
         self.vbox.pack_start (alignment)
 
         alignment = gtk.Alignment (0.5, 0.5)
-        label = HorzAnimatedLabel (GettableList(['I\'m TualatriX!']), 400,
-                                   30, 3000, 500, "<b>%s</b>")
+        label = HorzAnimatedLabel (GettableList(['I\'m TX!']), 400,
+                                   30, 3000, 500, 1, "<b>%s</b>")
         alignment.add (label)
         self.vbox.pack_start (alignment)
 
         alignment = gtk.Alignment (0.5, 0.5)
         label = HorzAnimatedLabel (GettableList(['I Love GTK+']), 400,
-                                   30, 3000, 900, "<b>%s</b>")
+                                   30, 3000, 900, 0, "<b>%s</b>")
         alignment.add (label)
         self.vbox.pack_start (alignment)
 
         alignment = gtk.Alignment (0.5, 0.5)
         label = HorzAnimatedLabel (GettableList(['Ubuntu is powerful!']), 400,
-                                   30, 3000, 1300, "<b>%s</b>")
+                                   30, 3000, 1300, 1, "<b>%s</b>")
         alignment.add (label)
         self.vbox.pack_start (alignment)
 
         alignment = gtk.Alignment (0.5, 0.5)
         label = HorzAnimatedLabel (GettableList(['So is Gentoo!']), 400,
-                                   30, 3000, 1700, "<b>%s</b>")
+                                   30, 3000, 1700, 0, "<b>%s</b>")
         alignment.add (label)
         self.vbox.pack_start (alignment)
 
