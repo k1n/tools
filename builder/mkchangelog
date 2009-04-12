@@ -6,7 +6,6 @@ import time
 TEMPLATE = '''%(app)s (%(major)s~%(minor)s) %(distro)s; urgency=low
 
 %(changelog)s
-
  -- TualatriX <tualatrix@gmail.com>  %(timestamp)s
 
 '''
@@ -14,8 +13,9 @@ TEMPLATE = '''%(app)s (%(major)s~%(minor)s) %(distro)s; urgency=low
 def make_changelog_content(changelog):
     list = []
     for line in changelog.split('\n'):
-        line = '  * ' + line
-        list.append(line)
+        if line:
+            line = '  * %s\n' % line
+            list.append(line)
 
     return ''.join(list)
 
@@ -38,7 +38,14 @@ def make_changelog_section(app, major, minor, distro, changelog):
 
 def make_daily(app, version, distro, file):
     data = open(file).read()
-    section = make_changelog_section('ubuntu-tweak', version + '-0', make_daily_timestamp(distro), distro, 'daily build')
+    section = make_changelog_section('ubuntu-tweak', version + '-0', make_daily_timestamp(distro), distro, 'daily build.\n')
+    f = open(file, 'w')
+    f.write(section + data)
+    f.close()
+
+def make_normal(app, version, distro, file):
+    data = open(file).read()
+    section = make_changelog_section('ubuntu-tweak', version + '-1', '%s1' % distro, distro, open('changelog').read())
     f = open(file, 'w')
     f.write(section + data)
     f.close()
@@ -46,4 +53,7 @@ def make_daily(app, version, distro, file):
 if __name__ == '__main__':
 #    print make_changelog_section('ubuntu-tweak', '0.4.6-1', 'hardy1', 'hardy', 'fix a bug')
 #    print make_daily('ubuntu-tweak', '0.4.7', 'jaunty', 'changelog')
-    make_daily(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    if sys.argv[5] == 'daily':
+        make_daily(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    else:
+        make_normal(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
