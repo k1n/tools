@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import os
 import sys
 import time
 
@@ -45,7 +46,7 @@ def make_daily(app, version, distro, file):
 
 def make_normal(app, version, distro, file):
     data = open(file).read()
-    section = make_changelog_section('ubuntu-tweak', version + '-1', '%s1' % distro, distro, open('changelog').read())
+    section = make_changelog_section('ubuntu-tweak', version + '-1', '%s1' % distro, distro, open('/home/tualatrix/Sources/tools/builder/changelog').read())
     f = open(file, 'w')
     f.write(section + data)
     f.close()

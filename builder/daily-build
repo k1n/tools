@@ -19,6 +19,12 @@ else
 	DISTRO=hardy
 fi
 
+if [ -n "$4" ];then
+	MODE=$4
+else
+	MODE=daily
+fi
+
 VERSION=$2
 DISTRO=$3
 MKLOG=$PWD/mkchangelog
@@ -60,7 +66,7 @@ cp -r $SRC_ROOT $BUILD_ROOT/
 cp -r $BUILD_ROOT/deb/$DISTRO $BUILD_ROOT/debian
 rm -r $BUILD_ROOT/deb
 rm -r $BUILD_ROOT/rpmspec
-$MKLOG $APPLICATION $VERSION $DISTRO $BUILD_ROOT/debian/changelog
+$MKLOG $APPLICATION $VERSION $DISTRO $BUILD_ROOT/debian/changelog $MODE
 CLEAN_SRC
 
 cd $BUILD_ROOT
