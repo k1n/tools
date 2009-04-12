@@ -1,0 +1,17 @@
+#!/bin/sh
+
+MODE=$1
+DISTO=$2
+CONTROL="/home/tualatrix/Sources/pagico/${DISTO}/debian"
+BASE="/home/tualatrix/Sources/pagico/${DISTO}/pagico-base"
+CODEX="/home/tualatrix/Sources/pagico/codex/CodeX_${MODE}"
+
+rm -rf $MODE
+mkdir $MODE
+
+cp -r $BASE $MODE
+cp -r $CONTROL $MODE/pagico-base
+cp -r $CODEX $MODE/pagico-base/pagico/CodeX
+
+cd $MODE/pagico-base
+debuild

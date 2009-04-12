@@ -70,4 +70,5 @@ $MKLOG $APPLICATION $VERSION $DISTRO $BUILD_ROOT/debian/changelog $MODE
 CLEAN_SRC
 
 cd $BUILD_ROOT
-debuild -S -sa
+#debuild -S -sa
+debuild

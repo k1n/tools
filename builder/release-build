@@ -1,0 +1,59 @@
+#!/bin/sh
+
+
+if [ -n "$1" ];then
+	APPLICATION=$1
+else
+	APPLICATION=ubuntu-tweak
+fi
+
+if [ -n "$2" ];then
+	VERSION=$2
+else
+	VERSION=0.4.7
+fi
+
+if [ -n "$3" ];then
+	DISTRO=$3
+else
+	DISTRO=hardy
+fi
+
+VERSION=$2
+DISTRO=$3
+MKLOG=$PWD/mkchangelog
+
+SRC_ROOT=$HOME/Sources/$APPLICATION
+TARBALL=$SRC_ROOT/$APPLICATION-$VERSION.tar.gz
+BUILD_ROOT=$HOME/build
+BUILD_DIR=$BUILD_ROOT/$APPLICATION-$VERSION
+ORIGBALL=$BUILD_ROOT/${APPLICATION}_${VERSION}.orig.tar.gz
+
+CLEAN_OLD() {
+	rm -rf $BUILD_DIR
+}
+
+CLEAN_OLD
+
+if [ ! -d $BUILD_ROOT ];then
+	mkdir $BUILD_ROOT
+fi
+
+INFO() {
+	echo $APPLICATION
+	echo $VERSION
+	echo $DISTRO
+	echo $SRC_ROOT
+	echo $BUILD_DIR
+}
+INFO
+
+cp -v $TARBALL $ORIGBALL
+tar zxf $ORIGBALL -C $BUILD_ROOT/
+cp -vr $SRC_ROOT/deb/$DISTRO $BUILD_DIR/debian
+$MKLOG $APPLICATION $VERSION $DISTRO $BUILD_DIR/debian/changelog release
+
+cd $BUILD_DIR
+debuild -S -sd
+
+cp -v $BUILD_DIR/debian/changelog $SRC_ROOT/deb/$DISTRO/changelog
