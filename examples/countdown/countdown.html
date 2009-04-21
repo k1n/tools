@@ -1,0 +1,175 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+
+<style type="text/css">
+#wrap {
+	height: 150px;
+	width: 180px;
+	display: block;
+	overflow: hidden; 
+	position: relative;
+	}
+
+
+#rotator {
+	width: 10000px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-right: 0px;
+	margin-left: -1080px; /* width times AmountOfFrames */
+	padding: 0;	
+	position: absolute;
+	}
+
+#rotator li {
+	height: 150px;
+	width: 180px;
+	margin: 0;
+	padding: 0;
+	float: left;
+	display: inline;
+	}
+body {
+	margin: 0;
+	padding: 0;
+}
+h1 {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 100;
+}
+h1 a {
+	width: 180px;
+	height: 150px;
+	display: block;
+	color: #eee;
+	text-decoration: none;
+	font-family: sans-serif;
+	font-size: 11pt;
+	text-indent: -1200px;
+}
+</style>
+<script type="text/javascript">
+
+/* Public domain / Markus Grönholm, Alshain Oy */
+
+var AmountOfFrames = 6;
+
+var posX = 0;
+
+var width = 180;
+
+var newPosX = 0;
+
+var movementTimeout, frameTimeout;
+
+var maxWidth = 180*AmountOfFrames;
+
+var frameID = -1;
+
+var frameDelays = new Array();
+
+var t = 0;
+
+frameDelays[0] = 1000 * 2.8;
+frameDelays[1] = 1000 * 2.5;
+frameDelays[2] = 1000 * 2.5;
+frameDelays[3] = 1000 * 2.5;
+frameDelays[4] = 1000 * 2.5;
+frameDelays[5] = 1000 * 2.5;
+defaultTimeOut = 1000 * 2;
+
+function resetRotator(){
+	var elem = document.getElementById("rotator");
+	elem.style.marginLeft = "0px";
+	posX = 0;
+	}
+
+function moveElem( pos ){
+	var elem = document.getElementById("rotator");
+	elem.style.marginLeft = -pos + "px";
+	}
+
+function moveFrame(){
+	if( t < 1 ){
+		var q = t;
+		var p = ( 1.0 - Math.cos( t * 3.14159) )*0.5;
+		moveElem( posX*(1-p) + p*newPosX );
+		t += 0.07;
+		
+		movementTimeout = setTimeout("moveFrame()", 12 );
+		}
+		else{
+			moveElem( newPosX );
+			posX = newPosX;
+			t = 0;
+			}
+	}
+
+function makeTransition(){
+	newPosX = posX + width;
+
+	if( newPosX < maxWidth ){
+		moveFrame();
+		}
+		
+	}
+
+function slideShow(){
+	
+	if (frameID == -1){ // first frame
+		resetRotator();
+		}
+	
+	if( frameID >= 0 ){
+		makeTransition();
+		}
+	frameID += 1;
+    var timeout = frameDelays[ frameID ];
+    if (!timeout) timeout = defaultTimeOut;
+	frameTimeout = setTimeout( "slideShow()", timeout );
+    if(frameID >= 20) frameID = -1;
+	}
+
+    var d = new Date();
+    dom = d.getDate();
+    month = d.getMonth();
+    year = d.getYear();
+    if (year < 2000) year = year - 100;
+    else year = year - 2000;
+
+// on the 26th there is 29 days to go
+// on the 27th there is 28 days to go
+// on the 31st there is 24 days to go
+// on the 1st there is 23 days to go
+
+    if (year == 9 && month == 2) 
+        days = 54 - dom;
+    else if (year == 9 && month == 3)
+        days = 23 - dom;
+    else 
+        days = 0;
+    if (days < 0) days = 0;
+    if (days < 10) days = '0' + days.toString();
+
+</script>
+
+</head><body onload="slideShow()">
+<h1><a target="_top" href="http://www.ubuntu.com/">Ubuntu 9.04: For your desktop, your laptop, your netbook, your server and in the cloud</a></h1>
+<div id="wrap">
+
+	<ul style="margin-left: -900px;" id="rotator">
+		<li><img src="countdown_files/1_desktop.png" alt="For your desktop"></li>
+		<li><img src="countdown_files/2_laptop.png" alt="For your laptop"></li>
+		<li><img src="countdown_files/3_netbook.png" alt="For your netbook"></li> 
+		<li><img src="countdown_files/4_server.png" alt="For your server"></li>
+		<li><img src="countdown_files/5_cloud.png" alt="In the cloud"></li>
+		<li><script type="text/javascript">document.write('<img src="'+days+'.png" alt="Frame 6">');</script><img src="countdown_files/02.png" alt="Frame 6"></li>
+		<noscript><li><img src="00.png" alt="Frame 6" alt="Ubuntu 9.04: Coming soon"/></li></noscript>
+	</ul>
+</div>
+<span id="tmp"></span>
+
+</body></html>
