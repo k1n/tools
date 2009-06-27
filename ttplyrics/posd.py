@@ -82,7 +82,7 @@ class PangoOsd(object):
         ctx.restore()
 
     def draw_text(self, text = 'Hello'):
-        self.window.window.move_resize(700, 720, 1280, 112)
+        self.window.window.move_resize(0, 700, 1280, 112)
         ctx = self.window.window.cairo_create()
         ptx = self.window.get_pango_context()
 
