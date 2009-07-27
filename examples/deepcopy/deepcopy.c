@@ -115,6 +115,7 @@ g_file_real_deep_copy (GFile                     *file,
       g_message("The file is directory: %s", relative_path);
       
       enumerator = g_file_enumerate_children (file, "standard::*", G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, cancellable, error);
+      g_free(relative_path);
     
       if (!g_cancellable_is_cancelled (cancellable))
         {
@@ -144,6 +145,20 @@ g_file_real_deep_copy (GFile                     *file,
               g_object_unref (enumerator);
             }
         }
+    } else {
+      relative_path = g_file_get_relative_path (source, file);
+
+      if (relative_path == NULL) 
+      {
+	      relative_path = g_file_get_basename (file);
+      }
+      child = g_file_resolve_relative_path (target, relative_path);
+
+      if (!g_cancellable_is_cancelled (cancellable))
+      {
+	      g_file_copy (file, child, 0, cancellable, NULL, NULL, error);
+      }
+      g_free(relative_path);
     }
 
   g_object_unref (info);
@@ -337,7 +352,7 @@ execute_button_clicked (GtkButton *button,
   
   g_cancellable_reset (cancellable);
   
-  source = g_file_new_for_path ("/home/ted/Sources/linux-2.6");
+  source = g_file_new_for_path ("/home/ted/Downloads/moblin-netbook-beta-refresh-20090705-001.img");
   target = g_file_new_for_path (target_path);
   g_file_deep_copy_async (source, 0, cancellable, deep_copy_progress, label, deep_copy_finished, NULL);
   g_object_unref (source);
