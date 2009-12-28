@@ -1,0 +1,11 @@
+#!/bin/bash 
+# run this script to check the mem usage. 
+function echo_mem {
+	echo $1
+	echo $2
+}
+meminfo=`/usr/bin/free |grep Mem |awk '{print $2, $3}'`
+upinfo=`uptime | cut -d \, -f 1`
+echo_mem $meminfo
+echo $upinfo
+hostname 
