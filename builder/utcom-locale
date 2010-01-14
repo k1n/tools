@@ -1,0 +1,10 @@
+#!/usr/bin/python
+
+import os
+import glob
+
+for file in glob.glob('*.po'):
+    lang = file.split('-')[1].split('.')[0]
+    dir = 'locale/%s/LC_MESSAGES/' % lang
+    os.makedirs(dir)
+    os.system('mv %s %s' % (file, dir+'django.po'))
