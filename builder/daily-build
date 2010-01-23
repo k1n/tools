@@ -63,12 +63,9 @@ cd $SRC_ROOT
 #git pull
 
 cp -r $SRC_ROOT $BUILD_ROOT/
-cp -r $BUILD_ROOT/deb/$DISTRO $BUILD_ROOT/debian
-rm -r $BUILD_ROOT/deb
-rm -r $BUILD_ROOT/rpmspec
 $MKLOG $APPLICATION $VERSION $DISTRO $BUILD_ROOT/debian/changelog $MODE
 CLEAN_SRC
 
 cd $BUILD_ROOT
-#debuild -S -sa
-debuild
+debuild -S -sa
+#debuild
