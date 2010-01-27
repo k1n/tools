@@ -7,4 +7,4 @@ for file in glob.glob('*.po'):
     lang = file.split('-')[1].split('.')[0]
     dir = 'locale/%s/LC_MESSAGES/' % lang
     os.makedirs(dir)
-    os.system('mv %s %s' % (file, dir+'django.po'))
+    os.system('cp %s %s' % (file, dir+'django.po'))
