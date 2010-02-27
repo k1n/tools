@@ -21,6 +21,27 @@
 	text-decoration: underline;
 }
 
+
+#myBoxParent {
+	position: relative;
+	left: 10px;
+	top: 10px;
+}
+
+#myBox {
+	position: absolute;
+	left: 10px;
+	top: 10px;
+}
+
+.floatLeft{
+	float:left; 
+}
+
+.floatRight {
+	float: right
+}
+
 abbr[title] {border-bottom: 1px dotted #999;}
 abbr[title]:hover {cursor: help;}
 abbr[title="ok"] {border-bottom: 1px dotted #FF0000;}
@@ -39,6 +60,29 @@ abbr[title="ok"] {border-bottom: 1px dotted #FF0000;}
 <p>Published on <span class="date">March 22nd, 2005</span>
 by <span class="author">Andy Budd</span></p>
 <abbr title="Cascading Style Sheets">CSS</abbr> <abbr>NO CSS</abbr> <abbr title="ok">With OK</abbr>
+
+<div>
+	<p>Nothing</p>
+	Hello world
+	<p> It's in P</p>
+</div>
+<div id="myBoxParent">
+<div id="myBox">
+	Hey girl!
+</div>
+</div>
+
+<div class="floatLeft">
+	Another block
+</div>
+
+<div class="floatRight">
+	I'm float
+</div>
+
+<div class="floatRight">
+	I'm float too
+</div>
 
 </body>
 </html>
