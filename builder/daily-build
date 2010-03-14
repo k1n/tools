@@ -1,5 +1,6 @@
 #!/bin/sh
 
+set -e
 
 if [ -n "$1" ];then
 	APPLICATION=$1
@@ -20,9 +21,9 @@ else
 fi
 
 if [ -n "$4" ];then
-	MODE=$4
+	MODE=binary
 else
-	MODE=daily
+	MODE=source
 fi
 
 VERSION=$2
@@ -43,7 +44,8 @@ CLEAN_SRC() {
 	rm -rf $BUILD_ROOT/.git
 	rm -rf $BUILD_ROOT/.gitignore
 	cd $BUILD_ROOT
-	find -name '*.pyc' | xargs rm 
+	find -name '*.pyc' | xargs rm -rf
+	rm -rf build
 }
 
 INFO() {
@@ -63,9 +65,13 @@ cd $SRC_ROOT
 #git pull
 
 cp -r $SRC_ROOT $BUILD_ROOT/
-$MKLOG $APPLICATION $VERSION $DISTRO $BUILD_ROOT/debian/changelog $MODE
+$MKLOG $APPLICATION $VERSION $DISTRO $BUILD_ROOT/debian/changelog daily
 CLEAN_SRC
 
 cd $BUILD_ROOT
-debuild -S -sa
-#debuild
+
+if [ "$MODE" = "binary" ]; then
+	debuild
+else
+	debuild -S -sa
+fi
