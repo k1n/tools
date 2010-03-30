@@ -10,9 +10,11 @@ class URLLister(SGMLParser):
         self.result = result
         self.open = False
 
-    def start_div(self, attrs):
+    def start_textarea(self, attrs):
         id = [v for k, v in attrs if k=='id']
-        if 'result_box' in id:
+        print id
+        if 'suggestion' in id:
+            print 'ok, open now'
             self.open = True
 
     def start_br(self, attrs):
@@ -21,9 +23,10 @@ class URLLister(SGMLParser):
 
     def handle_data(self, text):
         if self.open:
-            self.result.append(text.strip())
+            print text
+            self.result.append(text.strip().replace('<br>', '\n'))
 
-    def end_div(self):
+    def end_textarea(self):
         if self.open:
             self.open = False
 
