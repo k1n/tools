@@ -30,7 +30,7 @@ static GtkWidget    *label = NULL;
 static GCancellable *cancellable = NULL;
 static GFile        *source = NULL;
 static GFile        *target = NULL;
-static const gchar  *target_path = "/media/expe/";
+static const gchar  *target_path = "/tmp/";
 
 
 
@@ -352,7 +352,7 @@ execute_button_clicked (GtkButton *button,
   
   g_cancellable_reset (cancellable);
   
-  source = g_file_new_for_path ("/home/ted/Downloads/moblin-netbook-beta-refresh-20090705-001.img");
+  source = g_file_new_for_path ("/home/tualatrix/Downloads/");
   target = g_file_new_for_path (target_path);
   g_file_deep_copy_async (source, 0, cancellable, deep_copy_progress, label, deep_copy_finished, NULL);
   g_object_unref (source);
