@@ -1,0 +1,7 @@
+#!/bin/bash
+# Use this config to enable the bash completion
+# complete -o filenames -F _root_command notify
+
+$* && \
+notify-send "\"$*\" is finished" -i 'emblem-cool' || \
+notify-send "Oh no! \"$*\" going wrong." -i 'emblem-ohno'
