@@ -3,5 +3,5 @@
 # complete -o filenames -F _root_command notify
 
 $* && \
-notify-send "\"$*\" is finished" -i 'emblem-cool' || \
-notify-send "Oh no! \"$*\" going wrong." -i 'emblem-ohno'
+notify-send "Cool~ \"$*\" finished!" -i 'emblem-cool' || \
+notify-send "Oh no! \"$*\" failed!" -i 'emblem-ohno'
