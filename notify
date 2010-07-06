@@ -4,4 +4,4 @@
 
 $* && \
 notify-send "Cool~ \"$*\" finished!" -i 'emblem-cool' || \
-notify-send "Oh no! \"$*\" failed!" -i 'emblem-ohno'
+notify-send "Oh No! \"$*\" failed!" -i 'emblem-ohno'
