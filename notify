@@ -4,7 +4,7 @@
 
 KERNEL=`uname -s`
 
-if [ $KERNEL == 'linux' ]; then
+if [ $KERNEL == 'Linux' ]; then
 	$* && \
 	notify-send "Cool~ \"$*\" finished!" -i 'emblem-cool' || \
 	notify-send "Oh No! \"$*\" failed!" -i 'emblem-ohno'
