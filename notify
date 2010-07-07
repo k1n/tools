@@ -2,6 +2,14 @@
 # Use this config to enable the bash completion
 # complete -o filenames -F _root_command notify
 
-$* && \
-notify-send "Cool~ \"$*\" finished!" -i 'emblem-cool' || \
-notify-send "Oh No! \"$*\" failed!" -i 'emblem-ohno'
+KERNEL=`uname -s`
+
+if [ $KERNEL == 'linux' ]; then
+	$* && \
+	notify-send "Cool~ \"$*\" finished!" -i 'emblem-cool' || \
+	notify-send "Oh No! \"$*\" failed!" -i 'emblem-ohno'
+elif [ $KERNEL == 'Darwin' ]; then
+	$* && \
+	growlnotify -m "Cool~ \"$*\" finished!" || \
+	growlnotify -m "Oh No! \"$*\" failed!"
+fi
