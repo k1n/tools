@@ -1,6 +1,10 @@
 #!/bin/bash
-# Use this config to enable the bash completion
-# complete -o filenames -F _root_command notify
+#
+# Copyright: TualatriX <tualatrix@gmail.com> GPL v3
+#
+# Please add the following line to ~/.bashrc to enable the bash completion support
+#
+# 	complete -o filenames -F _root_command notify
 
 KERNEL=`uname -s`
 
