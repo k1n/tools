@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ -n "$1" ];then
+	REPO=$1
+else
+	REPO=testing
+fi
+
+for change in `ls *.changes`
+do
+	dput $REPO $change
+done
