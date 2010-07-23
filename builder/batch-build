@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -e
+
+
+if [ -n "$1" ];then
+	SCRIPT=daily-build
+	shift
+else
+	SCRIPT=release-build
+fi
+
+VERSION=$2
+
+shift
+
+for DISTRO in $*;do
+	./$SCRIPT ubuntu-tweak 0.5.5 $DISTRO
+done
