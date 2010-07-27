@@ -10,10 +10,12 @@ else
 	SCRIPT=release-build
 fi
 
-VERSION=$2
+APP=$2
+
+VERSION=$3
 
 shift
 
 for DISTRO in $*;do
-	./$SCRIPT ubuntu-tweak $VERSION $DISTRO
+	./$SCRIPT $APP $VERSION $DISTRO
 done
