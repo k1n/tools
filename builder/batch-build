@@ -2,17 +2,13 @@
 
 set -e
 
+SCRIPT=daily-build
 
-if [ -n "$1" ];then
-	SCRIPT=daily-build
-	shift
-else
-	SCRIPT=release-build
-fi
+APP=$1
 
-APP=$2
+VERSION=$2
 
-VERSION=$3
+shift
 
 shift
 
