@@ -15,5 +15,5 @@ VERSION=$2
 shift
 
 for DISTRO in $*;do
-	./$SCRIPT ubuntu-tweak 0.5.5 $DISTRO
+	./$SCRIPT ubuntu-tweak $VERSION $DISTRO
 done
