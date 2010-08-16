@@ -1,0 +1,12 @@
+# HOWTO
+# E.G.
+# alias switchlocale='. do_switch_locale'
+
+if [ -n "$1" ]
+then
+	export LANG=$1.UTF-8
+	export LANGUAGE=$1.UTF-8
+else
+	echo "Easy locale change"
+	echo "Usage: $0 [locale]"
+fi
