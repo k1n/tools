@@ -1,1 +1,8 @@
 Program('hello.c', LIBS='X11')
+Program('open-display.c', LIBS='X11')
+Program('simple-text.c', LIBS='X11')
+Program('simple-drawing.c', LIBS='X11')
+Program('events.c', LIBS='X11')
+Program('simple-window.c', LIBS='X11')
+Program('child-window.c', LIBS='X11')
+Program('window-operations.c', LIBS='X11')
