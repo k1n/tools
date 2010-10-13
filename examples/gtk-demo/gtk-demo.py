@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import gtk
+import gobject
 
 class Demo(gtk.Window):
     def __init__(self):
@@ -28,6 +29,7 @@ class Demo(gtk.Window):
         vbox.pack_start(entry, False, False, 0)
 
         self.show_all()
+        gobject.timeout_add(1000, self.on_timeout, entry)
 
     def on_entry_changed(self, widget, button):
         keyk = widget.get_text()
@@ -46,6 +48,11 @@ class Demo(gtk.Window):
             ValidKey = False
 
         button.set_sensitive(ValidKey)
+
+    def on_timeout(self, entry):
+#         print gtk.SelectionData().get_text()
+        print entry.get_clipboard(gtk.gdk.atom_intern('PRIMARY')).wait_for_text()# request_text
+        return True
 
 def main():
     gtk.main()
