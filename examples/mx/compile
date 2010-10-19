@@ -1,0 +1,4 @@
+#!/bin/bash
+
+valac --pkg mx-1.0 mx-expander-demo.vala  
+valac --pkg mx-1.0 mx-widget-factory.vala
