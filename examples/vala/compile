@@ -1,0 +1,4 @@
+#!/bin/bash
+valac --pkg gtk+-2.0 gtk-hello.vala
+valac --pkg clutter-1.0 clutter-demo.vala
+valac --pkg mx-1.0 mx-widget-factory.vala
