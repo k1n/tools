@@ -1,0 +1,40 @@
+#!/usr/bin/python
+# coding: utf-8
+#
+# Copyright(R) 2010 Tualatrix Chou <tualatrix@gmail.com>
+#
+# The easiest way to download videos from sohu.com
+
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
+import re
+import os
+import urllib
+import simplejson
+
+def get_vid_and_pid(url):
+    vid_pattern = re.compile('var vid="(\d+)"')
+    pid_pattern = re.compile('var pid ="(\d+)"')
+
+    html = urllib.urlopen(url).read()
+    return vid_pattern.findall(html)[0], pid_pattern.findall(html)[0]
+
+def get_video_file(vid, pid):
+    url = 'http://hot.vrs.sohu.com/vrs_flash.action?vid=%s&pid=%s' % (vid, pid)
+    json = simplejson.loads(urllib.urlopen(url).read())
+    tv_name = json['data']['tvName']
+
+    for num, video_url in enumerate(json['data']['clipsURL']):
+        basename = os.path.basename(video_url)
+        os.system('wget %s' % video_url)
+        os.system('mv -v %s %s' % (basename, tv_name + '-0%d.mp4' % (num + 1)))
+
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print('Usage: %s [url1 url2 ...]' % sys.argv[0])
+        sys.exit(1)
+
+    for url in sys.argv[1:]:
+        vid, pid = get_vid_and_pid(url)
+        get_video_file(vid, pid)
