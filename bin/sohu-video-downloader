@@ -71,8 +71,9 @@ if __name__ == '__main__':
         ENABLE_HD = False
 
     for url in sys.argv[1:]:
-        vid, pid = get_vid_and_pid(url)
-        if ENABLE_HD:
-            get_hd_video_file(vid, pid)
-        else:
-            get_video_file(vid, pid)
+        if url.startswith('http'):
+            vid, pid = get_vid_and_pid(url)
+            if ENABLE_HD:
+                get_hd_video_file(vid, pid)
+            else:
+                get_video_file(vid, pid)
