@@ -58,6 +58,7 @@ chinese_dict = {
     '多点触摸': '多点触控',
     '“': '「',
     '”': '」',
+    '模块': '模组',
 }
 
 def get_splits(text, length=4500):
