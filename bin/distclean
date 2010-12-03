@@ -1,0 +1,14 @@
+#!/bin/bash
+
+for file in `ls`;do
+	if [ -d $file ]; then
+		pushd $file
+		if [ -x '.git' ];then
+			rm -rf *
+			git checkout *
+		else
+			make distclean
+		fi
+		popd
+	fi
+done
