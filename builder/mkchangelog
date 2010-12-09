@@ -7,7 +7,7 @@ import time
 TEMPLATE = '''%(app)s (%(major)s~%(minor)s) %(distro)s; urgency=low
 
 %(changelog)s
- -- TualatriX <tualatrix@gmail.com>  %(timestamp)s
+ -- Tualatrix Chou <tualatrix@gmail.com>  %(timestamp)s
 
 '''
 
