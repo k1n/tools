@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+
+APP=ubuntu-tweak
+
+VERSION=`python -c 'import ubuntutweak;print ubuntutweak.__version__'`
+
+rm -rf ubuntu-tweak*
+
+./batch-build $APP $VERSION karmic lucid maverick natty
+
+./upload
