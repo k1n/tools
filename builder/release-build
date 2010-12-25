@@ -60,4 +60,4 @@ if [ ! -n "$REPLACE" ]; then
 fi
 
 cd $BUILD_DIR
-debuild -S -sd
+debuild -S -sa
