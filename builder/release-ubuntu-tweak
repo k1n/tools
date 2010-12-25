@@ -6,6 +6,10 @@ APP=ubuntu-tweak
 
 VERSION=`python -c 'import ubuntutweak;print ubuntutweak.__version__'`
 
+BUILD_ROOT=$HOME/Sources/$APP/dist
+
+rm -rf $BUILD_ROOT
+
 for DISTRO in karmic lucid maverick natty;do
 	./release-build $APP $VERSION $DISTRO
 done

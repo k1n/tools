@@ -50,6 +50,7 @@ cd $SRC_ROOT
 if [ ! -e $ORIGBALL ];then
 	python setup.py sdist
 	mv -v $TARBALL $ORIGBALL
+	NO_SOUCE_UPLOAD=1
 fi
 
 tar zxf $ORIGBALL -C $BUILD_ROOT/
@@ -63,4 +64,8 @@ if [ ! -n "$REPLACE" ]; then
 fi
 
 cd $BUILD_DIR
-debuild -S -sa
+if [ -n "$NO_SOUCE_UPLOAD" ];then
+	debuild -S -sa
+else
+	debuild -S -sd
+fi
