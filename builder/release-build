@@ -46,9 +46,12 @@ INFO() {
 INFO
 
 cd $SRC_ROOT
-python setup.py sdist
 
-cp -v $TARBALL $ORIGBALL
+if [ ! -e $ORIGBALL ];then
+	python setup.py sdist
+	mv -v $TARBALL $ORIGBALL
+fi
+
 tar zxf $ORIGBALL -C $BUILD_ROOT/
 cp -vr $SRC_ROOT/debian $BUILD_DIR/debian
 
