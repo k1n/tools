@@ -3,6 +3,8 @@
 # url: http://www.minilinux.net/node/27
   
 import sys  
+reload(sys)
+sys.setdefaultencoding('utf8')
 import httplib  
 import urllib  
 import urllib2  
@@ -46,7 +48,11 @@ def translate(text):
         resp = simplejson.load(urllib.urlopen('%s' % (base_url), data=data))
 
         try:
-            new_text += resp['responseData']['translatedText']
+            translated = resp['responseData']['translatedText']
+            translated = translated.replace('％', '%')
+            translated = re.sub("&#(\d+);", lambda s: chr(int(s.group(1))),   translated)
+            translated = re.sub("&([a-z]+);", lambda s: {"lt":"<", "gt":">", "amp":"&"}[s.group(1)], translated)
+            new_text += translated
         except:
             pass
 
