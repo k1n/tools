@@ -4,7 +4,7 @@ set -e
 
 APP=ubuntu-tweak
 
-VERSION=`python -c 'import ubuntutweak;print ubuntutweak.__version__'`
+VERSION=`cd $HOME/Sources/ubuntu-tweak && python -c 'import ubuntutweak;print ubuntutweak.__version__'`
 
 rm -rf ubuntu-tweak*
 
