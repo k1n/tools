@@ -13,7 +13,7 @@ import re
 import os
 import optparse
 import urllib
-import simplejson
+import json
 
 def get_vid_and_pid(url):
     vid_pattern = re.compile('var vid="(\d+)"')
@@ -28,10 +28,10 @@ def get_video_file(vid, pid, hd=False):
         url = 'http://hot.vrs.sohu.com/vrs_flash.action?vid=%s&pid=%s' % (vid, pid)
     else:
         url = 'http://hot.vrs.sohu.com/vrs_flash.action?vid=%s&pid=%s?ver==1' % (vid, pid)
-    json = simplejson.loads(urllib.urlopen(url).read())
-    tv_name = json['data']['tvName']
+    json_data = json.loads(urllib.urlopen(url).read())
+    tv_name = json_data['data']['tvName']
 
-    for num, video_url in enumerate(json['data']['clipsURL']):
+    for num, video_url in enumerate(json_data['data']['clipsURL']):
         basename = os.path.basename(video_url)
         if '?' in basename:
             basename = basename.split('?')[0]
