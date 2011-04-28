@@ -60,7 +60,7 @@ REPLACE=`head -1 $CHANGELOG | grep $DISTRO`
 
 if [ ! -n "$REPLACE" ]; then
 	echo "Replace the maverick with $DISTRO"
-	sed -i "1s/maverick/$DISTRO/g" $CHANGELOG
+	sed -i "1s/natty/$DISTRO/g" $CHANGELOG
 fi
 
 cd $BUILD_DIR
