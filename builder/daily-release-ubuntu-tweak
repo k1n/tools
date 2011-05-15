@@ -8,6 +8,6 @@ VERSION=`cd $HOME/Sources/ubuntu-tweak && python -c 'import ubuntutweak;print ub
 
 rm -rf ubuntu-tweak*
 
-./batch-build $APP $VERSION karmic lucid maverick natty
+./batch-build $APP $VERSION lucid maverick natty
 
 ./upload
