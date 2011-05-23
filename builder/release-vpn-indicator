@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+APP=vpn-indicator
+
+VERSION=`cd ~/Sources/vpn-indicator && cat setup.py |grep 'version'|awk -F"'" '{print $2}'`
+
+BUILD_ROOT=$HOME/Sources/$APP/dist
+
+rm -rf $BUILD_ROOT
+
+for DISTRO in natty;do
+	release-build $APP $VERSION $DISTRO
+done
