@@ -23,23 +23,23 @@ def make_changelog_content(changelog):
 def make_timestamp():
     return time.strftime('%a, %d %b %Y %X +0800', time.localtime())
 
-def make_daily_timestamp(distro):
-    return '%s~%s1' % (time.strftime('%Y%m%d', time.localtime()), distro)
+def make_daily_timestamp(distro, suffix='1'):
+    return '%s~%s%s' % (time.strftime('%Y%m%d', time.localtime()), distro, suffix)
 
 def make_changelog_section(app, major, minor, distro, changelog):
     global TEMPLATE
     return TEMPLATE % {
-                'app': app, 
-                'major': major, 
-                'minor': minor, 
-                'distro': distro, 
+                'app': app,
+                'major': major,
+                'minor': minor,
+                'distro': distro,
                 'changelog': make_changelog_content(changelog),
                 'timestamp': make_timestamp()
             }
 
-def make_daily(app, version, distro, file):
+def make_daily(app, version, distro, file, suffix='1'):
     data = open(file).read()
-    section = make_changelog_section('ubuntu-tweak', version + '-0', make_daily_timestamp(distro), distro, 'daily build.\n')
+    section = make_changelog_section('ubuntu-tweak', version + '-0', make_daily_timestamp(distro, suffix), distro, 'daily build.\n')
     f = open(file, 'w')
     f.write(section + data)
     f.close()
