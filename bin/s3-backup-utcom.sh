@@ -6,24 +6,27 @@
 set -e
 set -x
  
-REMOTE_PATH="public_html/ubuntu-tweak.com"
+REMOTE_PATH="$HOME/public_html/ubuntu-tweak.com"
 PROJECT_NAME="utcom"
 LOCAL_PATH="$HOME/Dropbox/$PROJECT_NAME-backup"
 PRE=$PROJECT_NAME-`date +%F`
 KERNEL=`uname -s`
  
-if [ ! -e $LOCAL_PATH ]
+if [ ! -e $LOCAL_PATH/$PROJECT_NAME ]
 then
-	mkdir -p $LOCAL_PATH
+	mkdir -p $LOCAL_PATH/$PROJECT_NAME
 fi
+
+
+cd $REMOTE_PATH; tar cf - --exclude '.git' $PROJECT_NAME | gzip > $LOCAL_PATH/$PRE.tar.gz
 
 cd $LOCAL_PATH
 
-cd $REMOTE_PATH; tar cf - --exclude '.git' $PROJECT_NAME | gzip > $PRE.tar.gz
 tar zxvf $PRE.tar.gz $PROJECT_NAME/$PROJECT_NAME/local_settings.py
 touch $PROJECT_NAME/$PROJECT_NAME/__init__.py
 
 cd $LOCAL_PATH/$PROJECT_NAME
+
 if [ -f $PROJECT_NAME/local_settings.py ];then
     if [ $KERNEL = "Darwin" ]; then
         gsed -i '/global_setting/d' $PROJECT_NAME/local_settings.py
@@ -44,5 +47,5 @@ cd $LOCAL_PATH
 
 mysqldump -u${DB_USER} -p${DB_PASSWORD} $DB_NAME | gzip > $PRE.sql.gz
 
-s3cmd put $PRE.tar.gz s3://imtx/
-s3cmd put $PRE.sql.gz s3://imtx/
+s3cmd put $LOCAL_PATH/$PRE.tar.gz s3://imtx/
+s3cmd put $LOCAL_PATH/$PRE.sql.gz s3://imtx/
