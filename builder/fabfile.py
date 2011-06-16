@@ -1,4 +1,5 @@
 import os
+import time
 import shutil
 
 import changelog
@@ -21,6 +22,23 @@ def clean_and_prepare_build_root(app):
     local('rm -rf ' + build_root + '/build')
     local('find %s -name "*.pyc" | xargs rm -rf' % build_root)
 
+def clean_and_prepare_tarball(app, version):
+    src_dir = os.path.join(os.path.expanduser('~'), 'Sources', app)
+    build_root = os.path.join(src_dir, 'dist')
+    build_dir = os.path.join(build_dir, '%s-%s' % (app, version))
+    tarball = os.path.join(build_root, '%s-%s.tar.gz' % (app, version))
+    origball = os.path.join(build_root, '%s_%s.orig.tar.gz' % (app, version))
+    changelog = os.path.join(build_dir, 'debian/changelog')
+
+    local('rm -rf ' + build_root + '*')
+
+    local('cd %s && python setup.py sdist' % src_dir)
+    local('mv %s %s' % (tarball, origball))
+
+    local('tar zxf %s -C $/' % (origball, build_root))
+    local('cp -r %s/debian %s/debian' % (src_dir, build_dir))
+
+
 def daily_build(app, version=None, *args, **kwargs):
     app = app.replace('-', '_')
     function_name = 'daily_build_%s' % app
@@ -36,6 +54,8 @@ def daily_build_ubuntu_tweak(*args, **kwargs):
 
     print("Start to build Ubuntu Tweak %s..." % version)
     clean_and_prepare_build_root(app)
+    local("cd %s && echo \"__version__ = '.'.join(map(str, VERSION)) + '+%s'\" >> ubuntutweak/__init__.py" % \
+            (build_root, time.strftime('%Y%m%d', time.localtime())), capture=True)
 
     suffix = kwargs.pop('suffix', '1')
     mode = kwargs.pop('mode', 's')
@@ -48,3 +68,7 @@ def daily_build_ubuntu_tweak(*args, **kwargs):
         else:
             local('cd %s && debuild -S -sa' % build_root, capture=False)
 
+def release_ubuntu_tweak(app='ubuntu-tweak', version=None, *args, **kwargs):
+    src_dir = os.path.join(os.path.expanduser('~'), 'Sources', app)
+    build_root = os.path.join(os.getcwd(), app)
+    version =  local("cd %s && python -c 'import ubuntutweak;print ubuntutweak.__version__'" % src_dir, capture=True)
