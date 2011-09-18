@@ -39,14 +39,14 @@ def make_changelog_section(app, major, minor, distro, changelog):
 
 def make_daily(app, version, distro, file, suffix='1'):
     data = open(file).read()
-    section = make_changelog_section('ubuntu-tweak', version + '-0', make_daily_timestamp(distro, suffix), distro, 'daily build.\n')
+    section = make_changelog_section(app, version + '-0', make_daily_timestamp(distro, suffix), distro, 'daily build.\n')
     f = open(file, 'w')
     f.write(section + data)
     f.close()
 
 def make_normal(app, version, distro, file):
     data = open(file).read()
-    section = make_changelog_section('ubuntu-tweak', version + '-1', '%s1' % distro, distro, open('/home/tualatrix/Sources/tools/builder/changelog').read())
+    section = make_changelog_section(app, version + '-1', '%s1' % distro, distro, open('/home/tualatrix/Sources/tools/builder/changelog').read())
     f = open(file, 'w')
     f.write(section + data)
     f.close()

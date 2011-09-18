@@ -45,12 +45,15 @@ def daily_build(app, version=None, *args, **kwargs):
     if function_name in globals():
         globals()[function_name](version=version, *args, **kwargs)
 
-def daily_build_ubuntu_tweak(*args, **kwargs):
-    app='ubuntu-tweak'
+def daily_build_ubuntu_tweak_0(*args, **kwargs):
+    daily_build_ubuntu_tweak(app='ubuntu-tweak-0', *args, **kwargs)
+
+def daily_build_ubuntu_tweak(app='ubuntu-tweak', *args, **kwargs):
     version=None
     src_dir = os.path.join(os.path.expanduser('~'), 'Sources', app)
     build_root = os.path.join(os.getcwd(), app)
-    version =  local("cd %s && python -c 'import ubuntutweak;print ubuntutweak.__version__'" % src_dir, capture=True)
+    pkg_name = ''.join(app.split('-'))
+    version =  local("cd %s && python -c 'import %s;print %s.__version__'" % (src_dir, pkg_name, pkg_name), capture=True)
 
     print("Start to build Ubuntu Tweak %s..." % version)
     clean_and_prepare_build_root(app)
@@ -59,7 +62,7 @@ def daily_build_ubuntu_tweak(*args, **kwargs):
 
     suffix = kwargs.pop('suffix', '1')
     mode = kwargs.pop('mode', 's')
-    distros = kwargs.pop('distros', 'natty')
+    distros = kwargs.pop('distros', os.popen('lsb_release -cs').read().strip())
 
     for distro in distros.split('-'):
         changelog.make_daily(app, version, distro, os.path.join(build_root, 'debian/changelog'), suffix)
