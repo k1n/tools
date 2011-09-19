@@ -57,8 +57,8 @@ def daily_build_ubuntu_tweak(app='ubuntu-tweak', *args, **kwargs):
 
     print("Start to build Ubuntu Tweak %s..." % version)
     clean_and_prepare_build_root(app)
-    local("cd %s && echo \"__version__ = '.'.join(map(str, VERSION)) + '+%s'\" >> ubuntutweak/__init__.py" % \
-            (build_root, time.strftime('%Y%m%d', time.localtime())), capture=True)
+    local("cd %s && echo \"__version__ = '.'.join(map(str, VERSION)) + '+%s'\" >> %s/__init__.py" % \
+            (build_root, time.strftime('%Y%m%d', time.localtime()), pkg_name), capture=True)
 
     suffix = kwargs.pop('suffix', '1')
     mode = kwargs.pop('mode', 's')
