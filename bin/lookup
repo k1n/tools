@@ -1,0 +1,4 @@
+#!/bin/bash
+# url: http://mitnk.com/57/linux_look/
+
+find ~/Documents/en -name "*.txt" | xargs look $@
