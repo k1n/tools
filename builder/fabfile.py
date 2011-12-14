@@ -78,4 +78,4 @@ def release_ubuntu_tweak(app='ubuntu-tweak', version=None, *args, **kwargs):
 
 def daily_recipe():
     local('rm -rf working')
-    local('bzr dailydeb ubuntu-tweak-local.recipe working --allow-fallback-to-native')
+    local('bzr dailydeb ubuntu-tweak.recipe working --allow-fallback-to-native')
