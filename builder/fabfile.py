@@ -75,3 +75,7 @@ def release_ubuntu_tweak(app='ubuntu-tweak', version=None, *args, **kwargs):
     src_dir = os.path.join(os.path.expanduser('~'), 'Sources', app)
     build_root = os.path.join(os.getcwd(), app)
     version =  local("cd %s && python -c 'import ubuntutweak;print ubuntutweak.__version__'" % src_dir, capture=True)
+
+def daily_recipe():
+    local('rm -rf working')
+    local('bzr dailydeb ubuntu-tweak-local.recipe working --allow-fallback-to-native')
