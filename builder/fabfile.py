@@ -13,12 +13,14 @@ def clean_and_prepare_build_root(app):
     src_dir = os.path.join(os.path.expanduser('~'), 'Sources', app)
     build_root = os.path.join(os.getcwd(), app)
 
-    local('rm -rf ' + build_root + '*')
+    local('rm -rf ' + build_root)
 
     local('cp -r %s %s' % (src_dir, build_root))
 
     local('rm -rf ' + build_root + '/.git')
     local('rm -rf ' + build_root + '/.gitignore')
+    local('rm -rf ' + build_root + '/.bzr')
+    local('rm -rf ' + build_root + '/.bzrignore')
     local('rm -rf ' + build_root + '/build')
     local('find %s -name "*.pyc" | xargs rm -rf' % build_root)
 
@@ -53,7 +55,8 @@ def daily_build_ubuntu_tweak(app='ubuntu-tweak', *args, **kwargs):
     src_dir = os.path.join(os.path.expanduser('~'), 'Sources', app)
     build_root = os.path.join(os.getcwd(), app)
     pkg_name = ''.join(app.split('-'))
-    version =  local("cd %s && python -c 'import %s;print %s.__version__'" % (src_dir, pkg_name, pkg_name), capture=True)
+    version = local("cd %s && python -c 'import %s;print %s.__version__'" % (src_dir, pkg_name, pkg_name), capture=True)
+    revno = 'bzr' + local("cd %s && bzr revno" % src_dir, capture=True)
 
     print("Start to build Ubuntu Tweak %s..." % version)
     clean_and_prepare_build_root(app)
@@ -65,7 +68,8 @@ def daily_build_ubuntu_tweak(app='ubuntu-tweak', *args, **kwargs):
     distros = kwargs.pop('distros', os.popen('lsb_release -cs').read().strip())
 
     for distro in distros.split('-'):
-        changelog.make_daily(app, version, distro, os.path.join(build_root, 'debian/changelog'), suffix)
+        changelog.make_daily(app, version, revno, distro,
+                             os.path.join(build_root, 'debian/changelog'), suffix)
         if mode == 'b':
             local('cd %s && debuild' % build_root, capture=False)
         else:

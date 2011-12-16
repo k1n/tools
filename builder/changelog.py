@@ -23,8 +23,9 @@ def make_changelog_content(changelog):
 def make_timestamp():
     return time.strftime('%a, %d %b %Y %X +0800', time.localtime())
 
-def make_daily_timestamp(distro, suffix='1'):
-    return '%s~%s%s' % (time.strftime('%Y%m%d', time.localtime()), distro, suffix)
+def make_daily_timestamp(revno, distro, suffix='1'):
+    return '%s+%s~%s%s' % (time.strftime('%Y%m%d', time.localtime()),
+                           revno, distro, suffix)
 
 def make_changelog_section(app, major, minor, distro, changelog):
     global TEMPLATE
@@ -37,9 +38,11 @@ def make_changelog_section(app, major, minor, distro, changelog):
                 'timestamp': make_timestamp()
             }
 
-def make_daily(app, version, distro, file, suffix='1'):
+def make_daily(app, version, revno, distro, file, suffix='1'):
     data = open(file).read()
-    section = make_changelog_section(app, version + '-0', make_daily_timestamp(distro, suffix), distro, 'daily build.\n')
+    section = make_changelog_section(app, version + '-0',
+                                     make_daily_timestamp(revno, distro, suffix),
+                                     distro, 'daily build.\n')
     f = open(file, 'w')
     f.write(section + data)
     f.close()
