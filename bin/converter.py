@@ -13,5 +13,5 @@ if not os.path.exists(prefix):
     os.makedirs(prefix)
 
 for i, name in enumerate(to_converted):
-    print('convert -resize 550x413 %s %s/%s-%d' % (name, prefix, prefix, i))
-    os.system('convert -resize 550x413 %s %s/%s-%d' % (name, prefix, prefix, i))
+    print('convert -resize 550x413 %s %s/%s-%d.jpg' % (name, prefix, prefix, i))
+    os.system('convert -resize 550x413 %s %s/%s-%d.jpg' % (name, prefix, prefix, i))
